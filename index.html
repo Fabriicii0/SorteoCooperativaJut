@@ -14,23 +14,32 @@
 
 <body>
   <div class="bg-white">
-    <header class="d-flex flex-wrap justify-content-center py-3 border-bottom mx-5">
-      <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none">
-        <img class="bi me-2 img-fluid" width="200" height="" src="img/logo-largo.png" alt="">
+    <header class="navbar navbar-expand-lg bg-body-tertiary py-3 border-bottom mx-lg-5 mx-3">
+        <div class="container-fluid">
+            <!-- Logo -->
+            <a href="/" class="navbar-brand d-flex align-items-center text-dark text-decoration-none">
+                <img class="img-fluid" width="200" src="img/logo-largo.png" alt="Logo">
+            </a>
 
-        <!--<span class="fs-4">Simple header</span>-->
-      </a>
+            <!-- Botón de menú para dispositivos móviles -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
-      <ul class="nav nav-pills">
-        <li class="nav-item"><a href="#" class="nav-link active" aria-current="page">Inicio</a></li>
-        <li class="nav-item"><a href="#" class="nav-link">Quienes Somos</a></li>
-        <li class="nav-item"><a href="#" class="nav-link">Ahorro</a></li>
-        <li class="nav-item"><a href="#" class="nav-link">Prestamos</a></li>
-        <li class="nav-item"><a href="#" class="nav-link">Servicios</a></li>
-        <li class="nav-item"><a href="#" class="nav-link">Beneficios</a></li>
-      </ul>
+            <!-- Menú de navegación -->
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav nav nav-pills">
+                    <li class="nav-item"><a href="#" class="nav-link">Inicio</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link">Quienes Somos</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link">Ahorro</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link">Préstamos</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link">Servicios</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link">Beneficios</a></li>
+                </ul>
+            </div>
+        </div>
     </header>
-  </div>
+</div>
   <div class="content">
     <h1>¡Sorteo Cooperativa Juticalpa!</h1>
     <h3>Asamblea Sectorial Juticalpa</h4>
@@ -76,6 +85,7 @@
   </div>
   <script src="js/index.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>
