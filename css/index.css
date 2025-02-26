@@ -1,0 +1,121 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin: 0;
+    background: #f0f0f0;
+
+    display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+}
+
+.content{
+    margin: 50px 0;
+}
+
+.contenedor {
+    display: inline-block;
+    overflow: hidden;
+    margin: 25px 0;
+    height: 100px;
+    width: 250px;
+    border: 2px solid #333;
+    font-size: 2rem;
+    line-height: 95px;
+    text-align: center;
+    position: relative;
+    border-radius: 8px;
+    background: white;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.numeros {
+    position: relative;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    font-size: 50px;
+}
+
+.numeros div {
+    height: 50px;
+    text-align: center;
+}
+
+.botones {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+button {
+    font-size: 1.5rem;
+    padding: 10px 20px;
+    cursor: pointer;
+    background: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    transition: background 0.3s;
+}
+
+button:hover {
+    background: #45a049;
+}
+
+button:disabled {
+    background: #cccccc;
+    cursor: not-allowed;
+}
+
+button#btnDetener {
+    background: #f44336;
+}
+
+button#btnDetener:hover {
+    background: #d32f2f;
+}
+
+button#btnDetener:disabled {
+    background: #cccccc;
+}
+
+.rango {
+    margin: 30px 0;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    align-items: center;
+}
+
+.rango input {
+    width: 80px;
+    padding: 5px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.rango label {
+    font-size: 1rem;
+    margin: 0 50px;
+}
+
+button#btnEliminar {
+    background: #ff9800;
+}
+
+button#btnEliminar:hover {
+    background: #f57c00;
+}
+
+button#btnEliminar:disabled {
+    background: #cccccc;
+}
+
+.numeros-eliminados {
+    margin-top: 20px;
+    font-size: 1rem;
+    color: #666;
+}
