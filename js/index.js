@@ -12,7 +12,7 @@ let primeraVezGirada = false;
 
 // Configuración de probabilidades (puedes ajustar estos valores)
 const rangosPrioritarios = [
-    { inicio: 1, fin: 200, peso: 0.35 },    // 15% probabilidad
+    { inicio: 1, fin: 200, peso: 0.45 },    // 15% probabilidad
     { inicio: 201, fin: 700, peso: 0.30 },
     { inicio: 701, fin: 1500, peso: 0.25 },
 
