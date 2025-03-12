@@ -158,7 +158,7 @@ function iniciarRuleta() {
     const config = {
         duracionTotal: 15000,    // Duración total en ms
         numerosRapidos: 400,     // Números en la fase rápida
-        numerosFinal: 100,       // Números para la transición final
+        numerosFinal: 110,       // Números para la transición final
         alturaNumero: 50,      // Altura de cada número en píxeles
     };
 
