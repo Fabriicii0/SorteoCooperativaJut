@@ -12,11 +12,11 @@ let primeraVezGirada = false;
 
 // Configuración de probabilidades (puedes ajustar estos valores)
 const rangosPrioritarios = [
-  { inicio: 1, fin: 200, peso: 0.45 }, // 15% probabilidad
-  { inicio: 201, fin: 700, peso: 0.3 },
-  { inicio: 701, fin: 1500, peso: 0.25 },
+  { inicio: 1, fin: 200, peso: 0.4 }, // 40% probabilidad
+  { inicio: 201, fin: 700, peso: 0.25 }, // 25% probabilidad
+  { inicio: 701, fin: 1500, peso: 0.2 }, // 20% probabilidad
 
-  // 20% restante para otros números
+  // 15% restante para otros números
 ];
 
 function easeOutExpo(x) {
@@ -179,18 +179,28 @@ function iniciarRuleta() {
   const valores = [];
 
   // Fase rápida
-  for (let i = 0; i < config.numerosRapidos; i++) {
-    valores.push(getRandomNumber(min, max));
+  const numerosGenerados = new Set();
+  while (numerosGenerados.size < config.numerosRapidos) {
+    let nuevoNumero = getRandomNumber(min, max);
+    if (!numerosGenerados.has(nuevoNumero)) {
+      numerosGenerados.add(nuevoNumero);
+    }
   }
+  valores.push(...Array.from(numerosGenerados));
 
   // Últimos números antes del final
   const ultimoNumeroAleatorio = valores[valores.length - 1];
-  const numerosTransicion = generarNumerosIntermedios(
-    ultimoNumeroAleatorio,
-    numeroFinal,
-    config.numerosFinal
-  );
-  valores.push(...numerosTransicion);
+  const numerosTransicion = new Set();
+  while (numerosTransicion.size < config.numerosFinal) {
+    let nuevoNumero = getRandomNumber(min, max);
+    if (!numerosTransicion.has(nuevoNumero) && nuevoNumero !== numeroFinal) {
+      numerosTransicion.add(nuevoNumero);
+    }
+  }
+  valores.push(...Array.from(numerosTransicion));
+
+  // Añadir el número final al final del array
+  valores.push(numeroFinal);
 
   // Insertar números en el DOM
   numeros.innerHTML = valores.map((num) => `<div>${num}</div>`).join("");
@@ -214,9 +224,10 @@ function iniciarRuleta() {
     if (progreso < 1) {
       animacionActual = requestAnimationFrame(animar);
     } else {
+      // Cuando termine la animación, mostrar solo el número final
       numeros.style.transition = "transform 0.3s ease-out";
       numeros.innerHTML = `<div>${numeroFinal}</div>`;
-      numeros.style.transform = "translateY(0px)";
+      numeros.style.transform = "translateY(0)";
 
       setTimeout(() => {
         numeros.style.transition = "none";
@@ -226,13 +237,13 @@ function iniciarRuleta() {
         animacionActual = null;
         deteniendo = false;
         primeraVezGirada = true;
+        lanzarConfeti(
+          3,
+          ["#ff0000", "#fbff07", "#1ec02b", "#5b64cf", "#db6fbf"],
+          5,
+          50
+        );
       }, 300);
-      lanzarConfeti(
-        3,
-        ["#ff0000", "#fbff07", "#1ec02b", "#5b64cf", "#db6fbf"],
-        5,
-        50
-      );
     }
   }
 
