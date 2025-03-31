@@ -1,34 +1,28 @@
-// Obtención de elementos del DOM
-const btnGirar = document.getElementById("btnGirar"); // Botón para girar la ruleta
-const btnDetener = document.getElementById("btnDetener"); // Botón para detener la ruleta
-const btnEliminar = document.getElementById("btnEliminar"); // Botón para eliminar el número actual
-const inputMinimo = document.getElementById("minimo"); // Input para el valor mínimo
-const inputMaximo = document.getElementById("maximo"); // Input para el valor máximo
-const numerosEliminados = document.getElementById("numerosEliminados"); // Elemento para mostrar números eliminados
+const btnGirar = document.getElementById("btnGirar");
+const btnDetener = document.getElementById("btnDetener");
+const btnEliminar = document.getElementById("btnEliminar");
+const inputMinimo = document.getElementById("minimo");
+const inputMaximo = document.getElementById("maximo");
+const numerosEliminados = document.getElementById("numerosEliminados");
+let animacionActual = null;
+let deteniendo = false;
+let numeroActual = 0;
+let numerosEliminadosArray = [];
+let primeraVezGirada = false;
 
-// Variables globales
-let animacionActual = null; // Referencia a la animación actual
-let deteniendo = false; // Indica si se está deteniendo la ruleta
-let numeroActual = 0; // Número seleccionado actualmente
-let numerosEliminadosArray = []; // Array de números que ya han sido eliminados
-let primeraVezGirada = false; // Indica si es la primera vez que se gira la ruleta
-
-// Configuración de probabilidades para diferentes rangos de números
-// Puedes ajustar estos valores para cambiar la probabilidad de que salgan ciertos números
+// Configuración de probabilidades (puedes ajustar estos valores)
 const rangosPrioritarios = [
-  { inicio: 1, fin: 200, peso: 0.4 }, // 40% de probabilidad para números entre 1-200
-  { inicio: 201, fin: 700, peso: 0.25 }, // 25% de probabilidad para números entre 201-700
-  { inicio: 701, fin: 1500, peso: 0.2 }, // 20% de probabilidad para números entre 701-1500
-  // El 15% restante es para otros números fuera de estos rangos
+  { inicio: 1, fin: 200, peso: 0.4 }, // 40% probabilidad
+  { inicio: 201, fin: 700, peso: 0.25 }, // 25% probabilidad
+  { inicio: 701, fin: 1500, peso: 0.2 }, // 20% probabilidad
+
+  // 15% restante para otros números
 ];
 
-// Función de animación para suavizar el efecto de frenado
 function easeOutExpo(x) {
   return x === 1 ? 1 : 1 - Math.pow(2, -10 * x);
 }
 
-// Función para obtener un número aleatorio considerando los rangos prioritarios
-// y excluyendo los números ya eliminados
 function getRandomNumber(min, max) {
   min = Math.ceil(min);
   max = Math.floor(max);
@@ -56,12 +50,11 @@ function getRandomNumber(min, max) {
     if (!numeroGenerado) {
       numero = Math.floor(Math.random() * (max - min + 1)) + min;
     }
-  } while (numerosEliminadosArray.includes(numero)); // Repetir si el número ya fue eliminado
+  } while (numerosEliminadosArray.includes(numero));
 
   return numero;
 }
 
-// Actualiza el texto que muestra los números eliminados
 function actualizarNumerosEliminados() {
   if (numerosEliminadosArray.length > 0) {
     numerosEliminados.textContent = `Números eliminados: ${numerosEliminadosArray
@@ -72,7 +65,6 @@ function actualizarNumerosEliminados() {
   }
 }
 
-// Función para eliminar el número actual de futuros sorteos
 function eliminarNumero() {
   if (numeroActual !== 0 && !numerosEliminadosArray.includes(numeroActual)) {
     numerosEliminadosArray.push(numeroActual);
@@ -89,28 +81,23 @@ function eliminarNumero() {
   }
 }
 
-// Valida que los valores de rango mínimo y máximo sean correctos
 function validarRango() {
   let min = parseInt(inputMinimo.value);
   let max = parseInt(inputMaximo.value);
 
-  // Valores por defecto si no son números válidos
   if (isNaN(min)) min = 1;
   if (isNaN(max)) max = 100;
 
-  // Asegura que el máximo sea mayor que el mínimo
   if (min >= max) {
     max = min + 1;
   }
 
-  // Actualiza los valores en los inputs
   inputMinimo.value = min;
   inputMaximo.value = max;
 
   return { min, max };
 }
 
-// Genera una secuencia de números intermedios entre inicio y fin
 function generarNumerosIntermedios(inicio, fin, cantidad) {
   const numeros = [];
   for (let i = 0; i < cantidad; i++) {
@@ -121,7 +108,6 @@ function generarNumerosIntermedios(inicio, fin, cantidad) {
   return numeros;
 }
 
-// Función para detener la ruleta antes de tiempo
 function detenerRuleta() {
   if (animacionActual) {
     deteniendo = true;
@@ -129,16 +115,7 @@ function detenerRuleta() {
   }
 }
 
-// Función para lanzar el efecto de confeti cuando se selecciona un número
-// Asegúrate de que la librería confetti esté disponible (puedes incluirla en tu HTML)
-// O, si estás usando un bundler como webpack, puedes importarla:
-// import confetti from 'canvas-confetti';
-
-// Si no estás usando importaciones, puedes declarar la función confetti aquí
-// para evitar errores si la librería se carga de otra manera.
-// Por ejemplo:
-// declare var confetti: any;
-
+//Animacion de Confetti
 function lanzarConfeti(
   duracionSegundos = 15,
   colores = ["#bb0000", "#ffffff"],
@@ -169,7 +146,6 @@ function lanzarConfeti(
   })();
 }
 
-// Función principal que inicia la animación de la ruleta
 function iniciarRuleta() {
   if (animacionActual) {
     cancelAnimationFrame(animacionActual);
@@ -183,13 +159,11 @@ function iniciarRuleta() {
     return;
   }
 
-  // Deshabilita/habilita botones durante la animación
   btnGirar.disabled = true;
   btnDetener.disabled = false;
   btnEliminar.disabled = true;
   deteniendo = false;
 
-  // Configuración de la animación
   const config = {
     duracionTotal: 15000, // Duración total en ms
     numerosRapidos: 400, // Números en la fase rápida
@@ -198,13 +172,13 @@ function iniciarRuleta() {
   };
 
   const numeros = document.getElementById("numero");
-  const numeroFinal = getRandomNumber(min, max); // Este será el número ganador
+  const numeroFinal = getRandomNumber(min, max);
   numeroActual = numeroFinal;
 
-  // Generar números para la animación
+  // Generar números
   const valores = [];
 
-  // Fase rápida - genera números aleatorios sin repetir
+  // Fase rápida
   const numerosGenerados = new Set();
   while (numerosGenerados.size < config.numerosRapidos) {
     let nuevoNumero = getRandomNumber(min, max);
@@ -214,7 +188,7 @@ function iniciarRuleta() {
   }
   valores.push(...Array.from(numerosGenerados));
 
-  // Últimos números antes del final - para dar sensación de transición
+  // Últimos números antes del final
   const ultimoNumeroAleatorio = valores[valores.length - 1];
   const numerosTransicion = new Set();
   while (numerosTransicion.size < config.numerosFinal) {
@@ -228,31 +202,26 @@ function iniciarRuleta() {
   // Añadir el número final al final del array
   valores.push(numeroFinal);
 
-  // Insertar números en el DOM como divs
+  // Insertar números en el DOM
   numeros.innerHTML = valores.map((num) => `<div>${num}</div>`).join("");
 
   const inicio = performance.now();
   const posicionFinal = -config.alturaNumero * (valores.length - 1);
 
-  // Función de animación que se ejecuta en cada frame
   function animar(tiempoActual) {
     const tiempoTranscurrido = tiempoActual - inicio;
     let progreso = Math.min(tiempoTranscurrido / config.duracionTotal, 1);
 
-    // Si se está deteniendo, acelera el progreso
     if (deteniendo) {
       progreso = Math.min(progreso + 0.1, 1);
     }
 
-    // Aplica la función de suavizado para que el movimiento sea más natural
     const progresoSuavizado = easeOutExpo(progreso);
     const posicionActual = progresoSuavizado * posicionFinal;
 
-    // Mueve los números verticalmente
     numeros.style.transform = `translateY(${posicionActual}px)`;
 
     if (progreso < 1) {
-      // Continúa la animación si no ha terminado
       animacionActual = requestAnimationFrame(animar);
     } else {
       // Cuando termine la animación, mostrar solo el número final
@@ -260,7 +229,6 @@ function iniciarRuleta() {
       numeros.innerHTML = `<div>${numeroFinal}</div>`;
       numeros.style.transform = "translateY(0)";
 
-      // Restaura el estado de los botones y lanza confeti
       setTimeout(() => {
         numeros.style.transition = "none";
         btnGirar.disabled = false;
@@ -269,24 +237,19 @@ function iniciarRuleta() {
         animacionActual = null;
         deteniendo = false;
         primeraVezGirada = true;
-        // Lanza confeti con colores festivos
         lanzarConfeti(
-          3, // Duración en segundos
-          ["#ff0000", "#fbff07", "#1ec02b", "#5b64cf", "#db6fbf"], // Colores
-          5, // Partículas
-          50 // Dispersión
+          3,
+          ["#ff0000", "#fbff07", "#1ec02b", "#5b64cf", "#db6fbf"],
+          5,
+          50
         );
       }, 300);
     }
   }
 
-  // Inicia la animación
   animacionActual = requestAnimationFrame(animar);
 }
 
-// Inicialización al cargar la página
+// Inicialización
 validarRango();
 actualizarNumerosEliminados();
-
-// Nota: Este código asume que existe una librería "confetti" ya cargada
-// para el efecto de confeti y elementos HTML con los IDs correspondientes
